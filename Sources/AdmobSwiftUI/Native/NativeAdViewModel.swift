@@ -11,6 +11,8 @@ import GoogleMobileAds
 public class NativeAdViewModel: NSObject, ObservableObject, GADNativeAdLoaderDelegate {
     @Published public var nativeAd: GADNativeAd?
     @Published public var isLoading: Bool = false
+    @Published public var isLoadedFail: Bool = false
+
     private var adLoader: GADAdLoader!
     private var adUnitID: String
     private var lastRequestTime: Date?
@@ -53,6 +55,7 @@ public class NativeAdViewModel: NSObject, ObservableObject, GADNativeAdLoaderDel
         self.nativeAd = nativeAd
         nativeAd.delegate = self
         self.isLoading = false
+        self.isLoadedFail = false
         NativeAdViewModel.cachedAds[adUnitID] = nativeAd
         nativeAd.mediaContent.videoController.delegate = self
     }
@@ -60,6 +63,7 @@ public class NativeAdViewModel: NSObject, ObservableObject, GADNativeAdLoaderDel
     public func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: Error) {
         print("\(adLoader) failed with error: \(error.localizedDescription)")
         self.isLoading = false
+        self.isLoadedFail = true
     }
 }
 
